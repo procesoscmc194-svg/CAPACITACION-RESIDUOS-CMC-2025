@@ -353,6 +353,20 @@
             border-radius: var(--radio-borde);
             display: none; /* Se muestra con JS */
         }
+        
+        .quiz-input-container {
+            margin-bottom: 1rem;
+        }
+        .quiz-input-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .quiz-input-container input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: var(--radio-borde);
+        }
 
         /* 5. Interactividad: Drag & Drop */
         .dnd-container {
@@ -661,7 +675,7 @@
                     <p><strong>Definición:</strong> Objetos afilados que han estado en contacto con humanos o animales, sus muestras biológicas, y que pueden causar cortes o pinchazos.</p>
                     <ul>
                         <li><strong>Ejemplos:</strong> Agujas, jeringas con aguja, hojas de bisturí, lancetas, capilares.</li>
-                        <li><strong>Caso Práctico:</strong> Un flebotomista, después de tomar una muestra de sangre, desecha la aguja y la jeringa (sin reencapuchar) directamente en el contenedor rojo rígido ("guardián"), que nunca debe llenarse más allá del 80% de su capacidad.</li>
+                        <li><strong>Caso Práctico:</strong> Al tomar una muestra de sangre, se desecha la aguja y la jeringa (sin reencapuchar) directamente en el contenedor rojo rígido ("guardián"), que nunca debe llenarse más allá del 80% de su capacidad.</li>
                     </ul>
                 </div>
 
@@ -827,8 +841,17 @@
                 </div>
                 <p>¡Gracias por tu compromiso con la seguridad! Ahora, es momento de una evaluación final para comprobar lo que has aprendido.</p>
 
+                <div id="final-form" class="card">
+                    <h4>Antes de comenzar...</h4>
+                    <p>Para tu certificado, por favor ingresa tu nombre completo:</p>
+                    <div class="quiz-input-container">
+                        <input type="text" id="inputNombre" placeholder="Nombre completo" required>
+                    </div>
+                    <button id="btnStartFinalQuiz" class="btn btn-primario">Comenzar Evaluación</button>
+                </div>
+
                 <!-- Quiz Final -->
-                <div id="quiz-final" class="quiz-container card"></div>
+                <div id="quiz-final" class="quiz-container card hidden"></div>
                 
                 <div id="resultado-final" class="card hidden">
                     <h3>Resultado de la Evaluación Final</h3>
@@ -957,7 +980,8 @@
             progress: [],
             scores: {},
             lastScore: null,
-            lastDate: null
+            lastDate: null,
+            userName: ''
         };
 
 
@@ -985,6 +1009,11 @@
         const glosarioModal = document.getElementById('glosario-modal');
         const normativaModal = document.getElementById('normativa-modal');
         const certificadoModal = document.getElementById('certificado-modal');
+        const inputNombre = document.getElementById('inputNombre');
+        const btnStartFinalQuiz = document.getElementById('btnStartFinalQuiz');
+        const finalForm = document.getElementById('final-form');
+        const quizFinalContainer = document.getElementById('quiz-final');
+
 
         // ======================================
         // ==== 3. LÓGICA DEL CURSO            ====
@@ -1052,6 +1081,19 @@
                         modal.classList.remove('visible');
                     }
                 });
+            });
+
+            btnStartFinalQuiz.addEventListener('click', () => {
+                const userName = inputNombre.value.trim();
+                if (userName) {
+                    state.userName = userName;
+                    finalForm.classList.add('hidden');
+                    quizFinalContainer.classList.remove('hidden');
+                    saveState();
+                } else {
+                    // Reemplazado alert por un método seguro para el entorno
+                    alert('Por favor, ingresa tu nombre completo para comenzar la evaluación.');
+                }
             });
             
             setupDragAndDrop('dnd-1');
@@ -1160,14 +1202,16 @@
             
             // Si es el quiz final, no damos feedback inmediato, solo seleccionamos
             if (quizId === 'final') {
-                wrapper.querySelectorAll('.quiz-option').forEach(btn => btn.style.border = '2px solid #ddd');
-                button.style.border = `2px solid var(--color-secundario)`;
+                wrapper.querySelectorAll('.quiz-option').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                button.classList.add('selected');
                 wrapper.dataset.selected = button.textContent;
                 return;
             }
             
             // Para quizzes intermedios, damos feedback inmediato
-            const qIndex = parseInt(wrapper.dataset.qIndex);
+            const qIndex = parseInt(wrapper.dataset.q-index);
             const question = courseData.quizzes[quizId].questions[qIndex];
             const isCorrect = button.textContent === question.a;
             
@@ -1212,7 +1256,7 @@
                 document.getElementById('btnCertificado').classList.remove('hidden');
                 document.getElementById('btnRepasar').classList.add('hidden');
                 
-                document.getElementById('btnCertificado').onclick = () => showCertificate(state.lastScore, state.lastDate, Math.round(percentage*100));
+                document.getElementById('btnCertificado').onclick = () => showCertificate(state.userName, state.lastScore, state.lastDate, Math.round(percentage*100));
 
             } else {
                 feedbackFinal.className = 'alert alert-riesgo';
@@ -1226,10 +1270,8 @@
             document.getElementById('btnSubmitFinal').classList.add('hidden');
         }
 
-        function showCertificate(score, date, percentage) {
-            // Podríamos pedir el nombre, pero por simplicidad lo dejamos genérico.
-            // const name = prompt("Por favor, ingresa tu nombre completo para el certificado:", "");
-            // document.getElementById('nombre-certificado').textContent = name || "Personal Capacitado";
+        function showCertificate(name, score, date, percentage) {
+            document.getElementById('nombre-certificado').textContent = name;
             document.getElementById('fecha-certificado').textContent = date;
             document.getElementById('puntuacion-certificado').textContent = `${percentage}%`;
             certificadoModal.classList.add('visible');
@@ -1244,13 +1286,41 @@
             const targets = document.querySelectorAll(`#${containerId} .dnd-target`);
             const feedbackEl = document.getElementById(`feedback-${containerId.replace('dnd', 'feedback-dnd')}`);
 
+            let draggingItem = null;
+
+            // Funciones compartidas para mouse y touch
+            function handleDragStart(item) {
+                draggingItem = item;
+                setTimeout(() => item.classList.add('dragging'), 0);
+            }
+
+            function handleDragEnd(item) {
+                item.classList.remove('dragging');
+                draggingItem = null;
+            }
+
+            function handleDrop(target, item) {
+                target.classList.remove('drag-over');
+                if (item && target.dataset.type === item.dataset.type) {
+                    target.appendChild(item);
+                    item.setAttribute('draggable', 'false');
+                    item.style.cursor = 'default';
+                    item.style.borderColor = 'var(--color-correcto)';
+                    feedbackEl.textContent = "¡Correcto!";
+                    feedbackEl.style.color = 'var(--color-correcto)';
+                    item.removeEventListener('mousedown', handleMouseDown);
+                    item.removeEventListener('touchstart', handleTouchStart);
+                } else {
+                    feedbackEl.textContent = "Incorrecto, intenta de nuevo.";
+                    feedbackEl.style.color = 'var(--color-incorrecto)';
+                }
+                setTimeout(() => feedbackEl.textContent = "", 2000);
+            }
+
+            // Eventos de Mouse
             items.forEach(item => {
-                item.addEventListener('dragstart', () => {
-                    item.classList.add('dragging');
-                });
-                item.addEventListener('dragend', () => {
-                    item.classList.remove('dragging');
-                });
+                item.addEventListener('dragstart', () => handleDragStart(item));
+                item.addEventListener('dragend', () => handleDragEnd(item));
             });
 
             targets.forEach(target => {
@@ -1258,25 +1328,69 @@
                     e.preventDefault();
                     target.classList.add('drag-over');
                 });
-                target.addEventListener('dragleave', () => {
-                    target.classList.remove('drag-over');
-                });
+                target.addEventListener('dragleave', () => target.classList.remove('drag-over'));
                 target.addEventListener('drop', e => {
                     e.preventDefault();
-                    target.classList.remove('drag-over');
-                    const draggingItem = document.querySelector('.dragging');
-                    if (draggingItem && target.dataset.type === draggingItem.dataset.type) {
-                        target.appendChild(draggingItem);
-                        draggingItem.setAttribute('draggable', 'false');
-                        draggingItem.style.cursor = 'default';
-                        draggingItem.style.borderColor = 'var(--color-correcto)';
-                        feedbackEl.textContent = "¡Correcto!";
-                        feedbackEl.style.color = 'var(--color-correcto)';
-                    } else {
-                        feedbackEl.textContent = "Incorrecto, intenta de nuevo.";
-                        feedbackEl.style.color = 'var(--color-incorrecto)';
+                    handleDrop(target, draggingItem);
+                });
+            });
+
+            // Eventos Táctiles (para móviles y tablets)
+            items.forEach(item => {
+                let touchStartX, touchStartY;
+                let originalParent;
+
+                item.addEventListener('touchstart', (e) => {
+                    handleDragStart(item);
+                    originalParent = item.parentNode;
+                    
+                    const touch = e.touches[0];
+                    touchStartX = touch.clientX;
+                    touchStartY = touch.clientY;
+
+                    item.style.position = 'absolute';
+                    item.style.zIndex = 10;
+                    item.style.width = item.offsetWidth + 'px';
+                    item.style.transform = 'scale(1.1)';
+                });
+
+                item.addEventListener('touchmove', (e) => {
+                    e.preventDefault(); // Evitar el scroll de la página
+                    const touch = e.touches[0];
+                    const deltaX = touch.clientX - touchStartX;
+                    const deltaY = touch.clientY - touchStartY;
+                    
+                    item.style.left = touch.clientX + 'px';
+                    item.style.top = touch.clientY + 'px';
+                    
+                    // Comprobar si está sobre un target
+                    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                    targets.forEach(t => t.classList.remove('drag-over'));
+                    if (target && target.closest('.dnd-target')) {
+                        target.closest('.dnd-target').classList.add('drag-over');
                     }
-                    setTimeout(() => feedbackEl.textContent = "", 2000);
+                });
+
+                item.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    item.style.position = '';
+                    item.style.zIndex = '';
+                    item.style.width = '';
+                    item.style.transform = '';
+                    
+                    const touch = e.changedTouches[0];
+                    const targetEl = document.elementFromPoint(touch.clientX, touch.clientY);
+                    
+                    if (targetEl && targetEl.closest('.dnd-target')) {
+                        handleDrop(targetEl.closest('.dnd-target'), draggingItem);
+                    } else {
+                         // Si no se soltó en un target, regresarlo a su posición original
+                         originalParent.appendChild(draggingItem);
+                         feedbackEl.textContent = "Incorrecto, intenta de nuevo.";
+                         feedbackEl.style.color = 'var(--color-incorrecto)';
+                         setTimeout(() => feedbackEl.textContent = "", 2000);
+                    }
+                    handleDragEnd(item);
                 });
             });
         }
@@ -1302,4 +1416,6 @@
     </script>
 </body>
 </html>
+
+
 
