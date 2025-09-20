@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capacitación en Manejo y Control de Residuos Hospitalarios</title>
+    <!-- 
+        Este es un curso digital autocontenido en un solo archivo HTML.
+        Incluye CSS y JavaScript para la interactividad y el diseño.
+        Desarrollado por Gemini.
+    -->
+    <style>
+        /* CSS EMBEBIDO */
+        
+        /* 1. Variables y Estilos Globales */
+        :root {
+            --color-primario: #00acb6;
+            --color-secundario: #81358a;
+            --color-acento: #9c61a4;
+            --color-texto: #333;
+            --color-fondo: #ffffff;
+            --color-fondo-suave: #f4f7f9;
+            --color-correcto: #28a745;
+            --color-incorrecto: #dc3545;
+            --fuente-principal: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            --radio-borde: 8px;
+            --sombra-caja: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--fuente-principal);
+            background-color: var(--color-fondo-suave);
+            color: var(--color-texto);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--color-secundario);
+            line-height: 1.3;
+            margin-bottom: 0.75rem;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; color: var(--color-primario); border-bottom: 2px solid var(--color-primario); padding-bottom: 0.5rem; margin-top: 1.5rem; }
+        h3 { font-size: 1.5rem; }
+        h4 { font-size: 1.2rem; color: var(--color-acento); }
+
+        p { margin-bottom: 1rem; }
+        a { color: var(--color-primario); text-decoration: none; }
+        img { max-width: 100%; height: auto; }
+        ul, ol { padding-left: 20px; }
+
+        .logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* 2. Estructura Principal y Navegación */
+        .portada {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://i.imgur.com/wNPXExU.png') no-repeat center center;
+            background-size: contain;
+            padding: 2rem;
+        }
+        
+        .portada-contenido {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: var(--radio-borde);
+            box-shadow: var(--sombra-caja);
+            max-width: 700px;
+        }
+        .portada-contenido .logo {
+             margin-bottom: 1rem;
+        }
+
+        .curso-wrapper {
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: var(--color-fondo);
+            padding: 1.5rem;
+            border-right: 1px solid #e0e0e0;
+            transition: transform 0.3s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .sidebar .logo {
+            margin-bottom: 1.5rem;
+        }
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar-nav a {
+            display: block;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radio-borde);
+            color: var(--color-texto);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background-color: var(--color-primario);
+            color: var(--color-fondo);
+        }
+        .sidebar-nav a .status-icon {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        .sidebar-nav a.completed .status-icon {
+            background-color: var(--color-correcto);
+            border-color: var(--color-correcto);
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+            margin-left: 280px; /* Ancho del sidebar */
+        }
+        
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .breadcrumb {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: var(--radio-borde);
+            margin: 1rem 0 2rem;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 20px;
+            width: 0%;
+            background-color: var(--color-primario);
+            border-radius: var(--radio-borde);
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            line-height: 20px;
+            transition: width 0.5s ease;
+        }
+
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .curso-footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            background-color: var(--color-fondo);
+            border-top: 1px solid #e0e0e0;
+            margin-left: 280px;
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: var(--color-primario);
+            color: white;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radio-borde);
+            cursor: pointer;
+        }
+
+        /* 3. Componentes y Botones */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radio-borde);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .btn-primario {
+            background-color: var(--color-primario);
+            color: var(--color-fondo);
+        }
+        .btn-primario:hover {
+            background-color: #008a94;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .btn-secundario {
+            background-color: var(--color-secundario);
+            color: var(--color-fondo);
+        }
+        .btn-secundario:hover {
+            background-color: #6a2c70;
+        }
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-primario);
+            border: 2px solid var(--color-primario);
+        }
+        .btn-outline:hover {
+            background-color: var(--color-primario);
+            color: var(--color-fondo);
+        }
+
+        .card {
+            background-color: var(--color-fondo);
+            border-radius: var(--radio-borde);
+            box-shadow: var(--sombra-caja);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: var(--radio-borde);
+            margin-bottom: 1rem;
+            border-left: 5px solid;
+        }
+        .alert-info { border-color: var(--color-primario); background-color: #e6f7f8; }
+        .alert-riesgo { border-color: var(--color-incorrecto); background-color: #fce8e6; }
+        .alert-exito { border-color: var(--color-correcto); background-color: #eaf6eb; }
+
+        .video-responsive {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            margin: 1.5rem 0;
+        }
+        .video-responsive iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .icon-list {
+            list-style: none;
+            padding: 0;
+        }
+        .icon-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .icon-list .icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            margin-right: 1rem;
+            background-color: var(--color-primario);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        /* 4. Interactividad: Quiz */
+        .quiz-container {
+            margin-top: 2rem;
+        }
+        .quiz-pregunta {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .quiz-opciones button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 0.5rem;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .quiz-opciones button:hover {
+            border-color: var(--color-acento);
+        }
+        .quiz-opciones button.correct {
+            background-color: var(--color-correcto);
+            border-color: var(--color-correcto);
+            color: white;
+        }
+        .quiz-opciones button.incorrect {
+            background-color: var(--color-incorrecto);
+            border-color: var(--color-incorrecto);
+            color: white;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: var(--radio-borde);
+            display: none; /* Se muestra con JS */
+        }
+
+        /* 5. Interactividad: Drag & Drop */
+        .dnd-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1.5rem;
+            background-color: var(--color-fondo-suave);
+            border-radius: var(--radio-borde);
+        }
+        .dnd-items, .dnd-targets {
+            padding: 1rem;
+            min-height: 150px;
+        }
+        .dnd-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .dnd-item {
+            padding: 0.75rem 1rem;
+            background-color: white;
+            border: 2px solid var(--color-acento);
+            border-radius: var(--radio-borde);
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.2s;
+        }
+        .dnd-item:active {
+            cursor: grabbing;
+        }
+        .dnd-item.dragging {
+            opacity: 0.5;
+            transform: scale(1.05);
+        }
+        .dnd-targets {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .dnd-target {
+            width: 150px;
+            min-height: 150px;
+            padding: 1rem;
+            border: 3px dashed #ccc;
+            border-radius: var(--radio-borde);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .dnd-target.drag-over {
+            border-color: var(--color-primario);
+            background-color: #e6f7f8;
+        }
+        .dnd-target h4 { margin-bottom: 0.5rem; font-size: 1rem; }
+        .dnd-feedback {
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        /* 6. Modales y Certificado */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: var(--radio-borde);
+            max-width: 90%;
+            width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        #certificado {
+            border: 10px solid var(--color-primario);
+            padding: 2rem;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        #certificado .logo { height: 70px; }
+        #certificado h2 { color: var(--color-secundario); font-size: 2.2rem; }
+
+        /* 7. Responsividad */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content, .curso-footer {
+                margin-left: 0;
+            }
+            .mobile-toggle {
+                display: block;
+            }
+            .dnd-container {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+            .main-content { padding: 1rem; }
+            .sidebar { width: 250px; }
+            .dnd-target { width: 120px; min-height: 120px; }
+        }
+
+        /* 8. Estilos de Impresión */
+        @media print {
+            body {
+                background-color: white;
+                font-size: 12pt;
+            }
+            .portada, .sidebar, .mobile-toggle, .curso-footer .btn, .quiz-container, .dnd-container, .btn, .content-header, .progress-bar-container {
+                display: none !important;
+            }
+            .curso-wrapper {
+                display: block;
+            }
+            .main-content, .curso-footer {
+                margin-left: 0;
+                padding: 0;
+                box-shadow: none;
+            }
+            .page {
+                display: block !important;
+                box-shadow: none;
+                border: none;
+                page-break-after: always;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+            a {
+                text-decoration: none;
+                color: black;
+            }
+            .video-responsive {
+                display: none; /* No imprimir videos */
+            }
+            #certificado-modal.visible {
+                position: static;
+                display: block;
+                opacity: 1;
+                visibility: visible;
+                background: none;
+            }
+            #certificado-modal .modal-content {
+                width: 100%;
+                max-width: 100%;
+                box-shadow: none;
+                border: 2px solid black;
+            }
+             #certificado-modal .modal-close, #certificado-modal .btn {
+                display: none;
+             }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ======================= -->
+    <!-- ==== PORTADA / INICIO ==== -->
+    <!-- ======================= -->
+    <div id="portada" class="portada">
+        <div class="portada-contenido">
+            <img src="https://i.imgur.com/wNPXExU.png" alt="Logo de la Institución" class="logo">
+            <h1>Capacitación en Manejo y Control de Residuos Hospitalarios</h1>
+            <p>Una guía esencial para garantizar la seguridad del personal, los pacientes y el medio ambiente.</p>
+            <h3>Objetivo de la capacitación:</h3>
+            <p>Proporcionar los conocimientos y habilidades necesarios para clasificar, manejar y desechar correctamente los residuos generados en el entorno hospitalario, minimizando riesgos y cumpliendo con la normativa vigente.</p>
+            <button id="btnComenzar" class="btn btn-primario">Comenzar Capacitación</button>
+        </div>
+    </div>
+
+    <!-- ========================== -->
+    <!-- ==== ESTRUCTURA DEL CURSO ==== -->
+    <!-- ========================== -->
+    <div id="curso-wrapper" class="curso-wrapper hidden">
+        
+        <!-- ==== BARRA LATERAL (SIDEBAR) ==== -->
+        <aside id="sidebar" class="sidebar">
+            <img src="https://i.imgur.com/wNPXExU.png" alt="Logo de la Institución" class="logo">
+            
+            <div class="progress-bar-container">
+                <div id="progressBar" class="progress-bar">0%</div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul id="menuNavegacion">
+                    <li><a href="#introduccion" class="nav-link active" data-page="introduccion"><span class="status-icon"></span>Introducción</a></li>
+                    <li><a href="#clasificacion" class="nav-link" data-page="clasificacion"><span class="status-icon"></span>Clasificación de Residuos</a></li>
+                    <li><a href="#manejo-seguro" class="nav-link" data-page="manejo-seguro"><span class="status-icon"></span>Reglas de Manejo Seguro</a></li>
+                    <li><a href="#practica-aplicada" class="nav-link" data-page="practica-aplicada"><span class="status-icon"></span>Práctica Aplicada</a></li>
+                    <li><a href="#conclusion" class="nav-link" data-page="conclusion"><span class="status-icon"></span>Conclusión y Evaluación</a></li>
+                </ul>
+            </nav>
+            
+            <div style="margin-top: 2rem;">
+                 <button id="btnGlosario" class="btn btn-outline" style="width:100%; margin-bottom: 0.5rem;">Glosario</button>
+                 <button id="btnNormativa" class="btn btn-outline" style="width:100%;">Normativa</button>
+            </div>
+        </aside>
+
+        <button id="mobileToggle" class="mobile-toggle">☰ Menú</button>
+
+        <!-- ==== CONTENIDO PRINCIPAL ==== -->
+        <main id="main-content" class="main-content">
+            <div class="content-header">
+                <div id="breadcrumb" class="breadcrumb">Inicio / Introducción</div>
+            </div>
+
+            <!-- MÓDULO 1: INTRODUCCIÓN -->
+            <section id="introduccion" class="page active">
+                <h2>1. Introducción: ¿Por qué es tan importante?</h2>
+                <p>El manejo inadecuado de los residuos hospitalarios es una bomba de tiempo. No solo representa un grave riesgo para la salud del personal médico, de enfermería, de limpieza y para los pacientes, sino también para la comunidad y el medio ambiente. Una gestión correcta es un pilar fundamental de la bioseguridad hospitalaria.</p>
+                
+                <div class="alert alert-riesgo">
+                    <h4>Principales Riesgos de un Mal Manejo:</h4>
+                    <ul>
+                        <li><strong>Contagios y Enfermedades:</strong> Exposición a patógenos peligrosos (VIH, Hepatitis B/C, COVID-19).</li>
+                        <li><strong>Accidentes Punzocortantes:</strong> Lesiones con agujas, bisturís u otros objetos afilados contaminados.</li>
+                        <li><strong>Contaminación Ambiental:</strong> Contaminación de suelos y aguas si los residuos no se tratan adecuadamente.</li>
+                        <li><strong>Sanciones Legales:</strong> Incumplimiento de normativas que puede acarrear multas y clausuras para la institución.</li>
+                    </ul>
+                </div>
+                
+                <div class="video-responsive">
+                    <iframe src="https://www.youtube.com/embed/Qk4bTA-45TA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>El objetivo de esta capacitación</strong> es claro: que cada persona que trabaja en este hospital comprenda su rol y responsabilidad en la cadena de manejo de residuos, desde su generación hasta su disposición final. ¡Tu participación es clave!
+                </div>
+                
+                <button class="btn btn-primario mark-as-read" data-page="introduccion">Marcar como leído y continuar</button>
+            </section>
+
+            <!-- MÓDULO 2: CLASIFICACIÓN -->
+            <section id="clasificacion" class="page">
+                <h2>2. Clasificación de los Residuos Hospitalarios (RPBI)</h2>
+                <p>Clasificar correctamente es el primer y más crucial paso. Cada tipo de residuo tiene un color y un contenedor específico. Confundirlos puede tener consecuencias graves.</p>
+                
+                <!-- a. Residuos Infecciosos -->
+                <div class="card">
+                    <h3>a) Residuos Infecciosos (Contenedor Rojo)</h3>
+                    <p><strong>Definición:</strong> Cualquier residuo que contenga o haya estado en contacto con sangre, fluidos corporales, cultivos de agentes infecciosos o restos de pacientes en aislamiento.</p>
+                    <ul>
+                        <li><strong>Ejemplos:</strong> Gasas empapadas en sangre, guantes con fluidos, equipos de venoclisis, abatelenguas usados, cultivos de laboratorio.</li>
+                        <li><strong>Caso Práctico:</strong> Después de una curación, una enfermera desecha las gasas y apósitos con sangre en la bolsa roja. El personal de limpieza sabe que esta bolsa requiere un manejo especial y no debe compactarse.</li>
+                    </ul>
+                </div>
+
+                <!-- b. Residuos Patológicos -->
+                <div class="card">
+                    <h3>b) Residuos Patológicos (Contenedor Amarillo)</h3>
+                    <p><strong>Definición:</strong> Tejidos, órganos y partes del cuerpo que se extraen en cirugías, autopsias o procedimientos médicos. También se incluyen placentas y muestras para análisis.</p>
+                    <ul>
+                        <li><strong>Ejemplos:</strong> Placentas, piezas anatómicas, órganos extirpados.</li>
+                        <li><strong>Caso Práctico:</strong> Tras una apendicectomía, el apéndice extirpado se coloca en una bolsa amarilla, que a su vez se deposita en un contenedor amarillo rígido para su tratamiento especial (generalmente incineración).</li>
+                    </ul>
+                </div>
+
+                <!-- c. Residuos Punzocortantes -->
+                <div class="card">
+                    <h3>c) Residuos Punzocortantes (Contenedor Rígido Rojo)</h3>
+                    <p><strong>Definición:</strong> Objetos afilados que han estado en contacto con humanos o animales, sus muestras biológicas, y que pueden causar cortes o pinchazos.</p>
+                    <ul>
+                        <li><strong>Ejemplos:</strong> Agujas, jeringas con aguja, hojas de bisturí, lancetas, capilares.</li>
+                        <li><strong>Caso Práctico:</strong> Un flebotomista, después de tomar una muestra de sangre, desecha la aguja y la jeringa (sin reencapuchar) directamente en el contenedor rojo rígido ("guardián"), que nunca debe llenarse más allá del 80% de su capacidad.</li>
+                    </ul>
+                </div>
+
+                <!-- d. Residuos No Anatómicos -->
+                 <div class="card">
+                    <h3>d) Residuos Químicos Peligrosos (Contenedor específico según sustancia)</h3>
+                    <p><strong>Definición:</strong> Sustancias químicas con características corrosivas, reactivas, explosivas, tóxicas o inflamables. Esto incluye medicamentos caducados o no utilizados.</p>
+                    <ul>
+                        <li><strong>Ejemplos:</strong> Fármacos citotóxicos, reactivos de laboratorio no utilizados, mercurio de termómetros rotos.</li>
+                        <li><strong>Caso Práctico:</strong> En farmacia, un lote de medicamentos para quimioterapia que ha caducado se segrega en un contenedor especial, etiquetado claramente como "Residuo Químico Citotóxico", para su gestión por una empresa especializada.</li>
+                    </ul>
+                </div>
+
+                <!-- e. Residuos Comunes o Municipales -->
+                <div class="card">
+                    <h3>e) Residuos Comunes o No Peligrosos (Contenedor Negro o Verde)</h3>
+                    <p><strong>Definición:</strong> Son residuos que no presentan riesgo biológico, químico o radiactivo. Son similares a los residuos domésticos.</p>
+                    <ul>
+                        <li><strong>Ejemplos:</strong> Papel de oficina, cartón, envoltorios de material estéril (plástico limpio), restos de comida de áreas administrativas, botellas de plástico vacías.</li>
+                        <li><strong>Caso Práctico:</strong> El personal de limpieza de las oficinas administrativas recoge el papel y cartón en bolsas negras. Saben que pueden manejar estos residuos sin equipo de protección personal especial, a diferencia de las bolsas rojas.</li>
+                    </ul>
+                </div>
+
+                <!-- D&D Actividad 1 -->
+                <div class="card">
+                    <h4>Actividad Interactiva: ¡Clasifica los residuos!</h4>
+                    <p>Arrastra cada residuo al contenedor correcto.</p>
+                    <div id="dnd-1" class="dnd-container">
+                        <div class="dnd-items">
+                            <div class="dnd-item" draggable="true" data-type="rojo">Gasa con sangre</div>
+                            <div class="dnd-item" draggable="true" data-type="negro">Envoltorio de jeringa (limpio)</div>
+                            <div class="dnd-item" draggable="true" data-type="punzocortante">Aguja usada</div>
+                        </div>
+                        <div class="dnd-targets">
+                            <div class="dnd-target" data-type="rojo"><h4>Contenedor Rojo</h4>(Infecciosos)</div>
+                            <div class="dnd-target" data-type="punzocortante"><h4>Contenedor Rígido</h4>(Punzocortantes)</div>
+                            <div class="dnd-target" data-type="negro"><h4>Contenedor Negro</h4>(Comunes)</div>
+                        </div>
+                    </div>
+                     <div class="dnd-feedback" id="feedback-dnd-1"></div>
+                </div>
+
+                <!-- Quiz Sección 2 -->
+                <div id="quiz-clasificacion" class="quiz-container card"></div>
+                
+                <button class="btn btn-primario mark-as-read" data-page="clasificacion">Marcar como leído y continuar</button>
+            </section>
+
+            <!-- MÓDULO 3: REGLAS DE MANEJO SEGURO -->
+            <section id="manejo-seguro" class="page">
+                <h2>3. Reglas Básicas de Manejo Seguro</h2>
+                <p>La seguridad es la prioridad. Seguir estas reglas reduce drásticamente el riesgo de accidentes.</p>
+                
+                <ul class="icon-list">
+                    <li>
+                        <div class="icon">🧤</div>
+                        <div><strong>Usar Siempre EPP:</strong> Utiliza siempre tu Equipo de Protección Personal (guantes, mascarilla, bata, gafas) al manejar residuos peligrosos. ¡No hay excusas!</div>
+                    </li>
+                    <li>
+                        <div class="icon">🚫</div>
+                        <div><strong>Nunca Reencapuchar Agujas:</strong> La mayoría de los accidentes punzocortantes ocurren al intentar poner la tapa de vuelta en la aguja. Deséchala directamente en el contenedor rígido.</div>
+                    </li>
+                    <li>
+                        <div class="icon">🗑️</div>
+                        <div><strong>Llenado al 80%:</strong> Nunca llenes los contenedores (bolsas o rígidos) más allá del 80% de su capacidad. Esto evita derrames y facilita un cierre seguro.</div>
+                    </li>
+                    <li>
+                        <div class="icon">🔒</div>
+                        <div><strong>Cierre Hermético:</strong> Asegúrate de que las bolsas estén bien amarradas y los contenedores rígidos bien cerrados antes de transportarlos.</div>
+                    </li>
+                    <li>
+                        <div class="icon">➡️</div>
+                        <div><strong>Etiquetado Claro:</strong> Todo contenedor de RPBI debe estar claramente etiquetado con el símbolo universal de riesgo biológico.</div>
+                    </li>
+                     <li>
+                        <div class="icon">🧼</div>
+                        <div><strong>Higiene de Manos:</strong> Lávate las manos con agua y jabón o usa desinfectante a base de alcohol después de manipular cualquier residuo, incluso si usaste guantes.</div>
+                    </li>
+                </ul>
+
+                <!-- Quiz Sección 3 -->
+                <div id="quiz-manejo-seguro" class="quiz-container card"></div>
+                
+                <button class="btn btn-primario mark-as-read" data-page="manejo-seguro">Marcar como leído y continuar</button>
+            </section>
+            
+            <!-- MÓDULO 4: PRÁCTICA APLICADA -->
+            <section id="practica-aplicada" class="page">
+                <h2>4. Ejemplo de Práctica Aplicada: El Ciclo de una Inyección</h2>
+                <p>Veamos un ejemplo paso a paso para consolidar lo aprendido. Una enfermera va a aplicar una inyección intramuscular.</p>
+                
+                <div class="card">
+                    <h4>Paso 1: Preparación</h4>
+                    <p>La enfermera prepara una bandeja con la jeringa en su envoltorio, el vial del medicamento, una torunda de algodón y guantes.</p>
+                    <p><strong>Residuos Generados hasta ahora:</strong> Ninguno peligroso. Los envoltorios limpios y el vial vacío (si no es de un medicamento peligroso) irán al contenedor negro.</p>
+                </div>
+                <div class="card">
+                    <h4>Paso 2: Aplicación</h4>
+                    <p>Se pone los guantes, administra el medicamento al paciente y usa la torunda de algodón para presionar ligeramente el punto de inyección. El algodón se mancha con una gota de sangre.</p>
+                    <p><strong>Nuevos Residuos:</strong></p>
+                    <ul>
+                        <li><strong>Algodón con sangre:</strong> 
+                            <span style="background-color: #dc3545; color: white; padding: 2px 6px; border-radius: 4px;">RESIDUO INFECCIOSO</span>. Debe ir al <strong>contenedor rojo</strong>.
+                        </li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Paso 3: Desecho Inmediato</h4>
+                    <p>Inmediatamente después de retirar la aguja del paciente, la desecha (junto con la jeringa) en el <strong>contenedor rígido rojo</strong> para punzocortantes que tiene cerca. <strong>NO intenta reencapucharla.</strong></p>
+                     <p><strong>Nuevos Residuos:</strong></p>
+                    <ul>
+                        <li><strong>Aguja y jeringa:</strong> 
+                            <span style="background-color: #dc3545; color: white; padding: 2px 6px; border-radius: 4px;">RESIDUO PUNZOCORTANTE</span>. Debe ir al <strong>contenedor rígido rojo</strong>.
+                        </li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Paso 4: Limpieza Final</h4>
+                    <p>Se quita los guantes y los desecha en el contenedor rojo (porque tuvieron contacto con el paciente). Finalmente, se lava las manos.</p>
+                     <p><strong>Resumen de la clasificación:</strong></p>
+                     <ul>
+                         <li><strong>Contenedor Negro:</strong> Envoltorio de la jeringa.</li>
+                         <li><strong>Contenedor Rojo (Bolsa):</strong> Algodón con sangre, guantes usados.</li>
+                         <li><strong>Contenedor Rojo (Rígido):</strong> Jeringa con aguja.</li>
+                     </ul>
+                </div>
+
+                 <!-- D&D Actividad 2 -->
+                <div class="card">
+                    <h4>Actividad Interactiva: ¿Dónde va cada cosa?</h4>
+                    <p>Basado en el ejemplo de la inyección, clasifica los siguientes elementos.</p>
+                    <div id="dnd-2" class="dnd-container">
+                        <div class="dnd-items">
+                            <div class="dnd-item" draggable="true" data-type="rojo">Guantes usados</div>
+                            <div class="dnd-item" draggable="true" data-type="negro">Vial de vidrio vacío (no peligroso)</div>
+                            <div class="dnd-item" draggable="true" data-type="punzocortante">Bisturí desechable</div>
+                        </div>
+                        <div class="dnd-targets">
+                             <div class="dnd-target" data-type="rojo"><h4>Contenedor Rojo</h4>(Infecciosos)</div>
+                            <div class="dnd-target" data-type="punzocortante"><h4>Contenedor Rígido</h4>(Punzocortantes)</div>
+                            <div class="dnd-target" data-type="negro"><h4>Contenedor Negro</h4>(Comunes)</div>
+                        </div>
+                    </div>
+                    <div class="dnd-feedback" id="feedback-dnd-2"></div>
+                </div>
+                
+                <button class="btn btn-primario mark-as-read" data-page="practica-aplicada">Marcar como leído y continuar</button>
+            </section>
+            
+            <!-- MÓDULO 5: CONCLUSIÓN Y EVALUACIÓN -->
+            <section id="conclusion" class="page">
+                <h2>5. Conclusión: Una Responsabilidad Compartida</h2>
+                <p>Has llegado al final de la capacitación. Recuerda que el manejo seguro de residuos no es tarea de una sola persona, sino una cadena de responsabilidad en la que todos somos un eslabón fundamental.</p>
+                
+                <div class="alert alert-exito">
+                    <h4>Pasos Clave a Recordar:</h4>
+                    <ol>
+                        <li><strong>Identifica y Clasifica:</strong> Piensa antes de desechar. ¿Rojo, amarillo, negro o rígido?</li>
+                        <li><strong>Desecha en el Lugar Correcto:</strong> Usa el contenedor adecuado, siempre.</li>
+                        <li><strong>Protegete a Ti y a los Demás:</strong> Usa tu EPP y sigue las reglas de seguridad.</li>
+                        <li><strong>Reporta Incidentes:</strong> Si ocurre un derrame o un accidente, informa inmediatamente a tu supervisor.</li>
+                    </ol>
+                </div>
+                <p>¡Gracias por tu compromiso con la seguridad! Ahora, es momento de una evaluación final para comprobar lo que has aprendido.</p>
+
+                <!-- Quiz Final -->
+                <div id="quiz-final" class="quiz-container card"></div>
+                
+                <div id="resultado-final" class="card hidden">
+                    <h3>Resultado de la Evaluación Final</h3>
+                    <p>Tu puntuación es: <strong id="puntuacion-final">0/0</strong></p>
+                    <div id="feedback-final" class="alert"></div>
+                    <div id="acciones-finales">
+                         <button id="btnCertificado" class="btn btn-primario hidden">Ver/Imprimir Certificado</button>
+                         <button id="btnRepasar" class="btn btn-secundario hidden">Repasar Curso</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-primario mark-as-read" data-page="conclusion">Marcar como finalizado</button>
+            </section>
+
+        </main>
+        
+        <footer class="curso-footer">
+            <img src="https://i.imgur.com/wNPXExU.png" alt="Logo de la Institución" class="logo">
+            <p>&copy; 2024 Capacitación Institucional. Todos los derechos reservados.</p>
+            <button id="btnReiniciar" class="btn btn-secundario">Reiniciar Curso</button>
+            <button id="btnImprimir" class="btn btn-outline">Imprimir Resumen</button>
+        </footer>
+    </div>
+    
+    <!-- ======================= -->
+    <!-- ==== MODALES ==== -->
+    <!-- ======================= -->
+
+    <!-- Modal del Certificado -->
+    <div id="certificado-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="document.getElementById('certificado-modal').classList.remove('visible')">&times;</button>
+            <div id="certificado">
+                <img src="https://i.imgur.com/wNPXExU.png" alt="Logo" class="logo">
+                <h3 style="margin-top: 1rem; color: #777;">Certificado de Finalización</h3>
+                <h2>Capacitación en Manejo y Control de Residuos Hospitalarios</h2>
+                <p style="margin: 2rem 0;">Se certifica que:</p>
+                <h3 id="nombre-certificado" style="border-bottom: 2px solid var(--color-acento); padding-bottom: 0.5rem; display: inline-block;">Personal Capacitado</h3>
+                <p style="margin-top: 2rem;">Ha completado satisfactoriamente la capacitación el día <strong id="fecha-certificado">DD/MM/AAAA</strong>.</p>
+                <p>Puntuación Obtenida: <strong id="puntuacion-certificado">0%</strong></p>
+            </div>
+             <button onclick="window.print()" class="btn btn-primario" style="margin-top: 1rem;">Imprimir Certificado</button>
+        </div>
+    </div>
+    
+    <!-- Modal del Glosario -->
+    <div id="glosario-modal" class="modal-overlay">
+         <div class="modal-content">
+            <button class="modal-close" onclick="document.getElementById('glosario-modal').classList.remove('visible')">&times;</button>
+            <h2>Glosario de Términos Clave</h2>
+            <dl>
+                <dt><strong>RPBI:</strong></dt>
+                <dd>Residuos Peligrosos Biológico-Infecciosos. Es la categoría que engloba a la mayoría de los residuos con riesgo de causar enfermedades.</dd>
+                <dt><strong>EPP:</strong></dt>
+                <dd>Equipo de Protección Personal. Incluye guantes, mascarillas, batas, gafas de seguridad, etc., diseñados para proteger al trabajador de riesgos laborales.</dd>
+                <dt><strong>Punzocortante:</strong></dt>
+                <dd>Cualquier objeto afilado (agujas, bisturís, etc.) que pueda cortar o pinchar la piel y que ha estado en contacto con agentes biológicos.</dd>
+                 <dt><strong>Bioseguridad:</strong></dt>
+                <dd>Conjunto de normas y medidas para proteger la salud del personal, frente a riesgos biológicos, químicos y físicos a los que está expuesto en el desempeño de sus funciones.</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Modal de Normativa -->
+    <div id="normativa-modal" class="modal-overlay">
+         <div class="modal-content">
+            <button class="modal-close" onclick="document.getElementById('normativa-modal').classList.remove('visible')">&times;</button>
+            <h2>Normativas y Buenas Prácticas</h2>
+            <p>El manejo de RPBI está regulado por normativas estrictas a nivel nacional e internacional. En México, la principal referencia es la <strong>NOM-087-ECOL-SSA1-2002</strong>, que establece la clasificación y especificaciones de manejo.</p>
+            <h4>Principios Clave de la Normativa:</h4>
+            <ul>
+                <li>Obligatoriedad de clasificar y envasar los residuos en el sitio de generación.</li>
+                <li>Establecimiento de rutas internas para el transporte seguro de residuos.</li>
+                <li>Requisitos para el almacenamiento temporal antes de la recolección externa.</li>
+                <li>Lineamientos para el tratamiento y disposición final por empresas autorizadas.</li>
+            </ul>
+            <p>Es responsabilidad de la institución y de cada empleado conocer y aplicar estas directrices. El incumplimiento puede resultar en sanciones severas.</p>
+            <p><em>Nota: Para ver la normativa completa, consulta los documentos oficiales proporcionados por la administración del hospital.</em></p>
+        </div>
+    </div>
+
+    <script>
+    // JAVASCRIPT EMBEBIDO
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // ======================================
+        // ==== 1. DEFINICIÓN DE DATOS Y ESTADO ====
+        // ======================================
+
+        const courseData = {
+            pages: ['introduccion', 'clasificacion', 'manejo-seguro', 'practica-aplicada', 'conclusion'],
+            quizzes: {
+                clasificacion: {
+                    title: "Quiz: Clasificación",
+                    questions: [
+                        { q: "¿En qué contenedor se desecha una gasa empapada en sangre?", o: ["Negro", "Rojo", "Amarillo"], a: "Rojo", f: "Los materiales en contacto con sangre o fluidos corporales son infecciosos y van en el contenedor rojo." },
+                        { q: "Un envoltorio de plástico limpio de una jeringa se considera residuo común.", o: ["Verdadero", "Falso"], a: "Verdadero", f: "Si no ha estado en contacto con fluidos, es un residuo común (contenedor negro)." },
+                        { q: "Las agujas usadas se desechan en la bolsa roja.", o: ["Verdadero", "Falso"], a: "Falso", f: "¡Nunca! Las agujas son punzocortantes y deben ir en un contenedor rígido rojo para evitar accidentes." }
+                    ]
+                },
+                'manejo-seguro': {
+                    title: "Quiz: Manejo Seguro",
+                    questions: [
+                        { q: "¿Hasta qué capacidad máxima se debe llenar un contenedor de RPBI?", o: ["50%", "80%", "100%"], a: "80%", f: "Llenar los contenedores hasta un máximo del 80% previene derrames y facilita un cierre seguro." },
+                        { q: "Es una buena práctica reencapuchar las agujas con cuidado para evitar pinchazos.", o: ["Verdadero", "Falso"], a: "Falso", f: "¡Falso! Nunca se deben reencapuchar las agujas. Es la principal causa de accidentes punzocortantes." },
+                        { q: "¿Qué es lo último que debes hacer después de manejar residuos y quitarte el EPP?", o: ["Tomar un café", "Llenar papeleo", "Lavarte las manos"], a: "Lavarte las manos", f: "La higiene de manos es el paso final y crucial para prevenir la propagación de gérmenes." }
+                    ]
+                },
+                final: {
+                    title: "Evaluación Final",
+                    questions: [
+                        { q: "Un riñón extirpado en una cirugía se considera residuo...", o: ["Infeccioso (rojo)", "Punzocortante (rígido)", "Patológico (amarillo)"], a: "Patológico (amarillo)", f: "Los tejidos y órganos son residuos patológicos y van en contenedor amarillo." },
+                        { q: "El personal de limpieza puede compactar las bolsas rojas para ahorrar espacio.", o: ["Verdadero", "Falso"], a: "Falso", f: "Las bolsas con residuos infecciosos nunca deben compactarse, ya que puede causar aerosoles o derrames peligrosos." },
+                        { q: "El EPP es opcional si solo se va a estar en contacto con los residuos por un momento.", o: ["Verdadero", "Falso"], a: "Falso", f: "El uso de EPP es siempre obligatorio al manejar residuos peligrosos, sin importar el tiempo de exposición." },
+                        { q: "Una hoja de bisturí usada se desecha en:", o: ["Bolsa roja", "Contenedor rígido rojo", "Contenedor negro"], a: "Contenedor rígido rojo", f: "Los bisturís son punzocortantes y deben ir en el contenedor rígido para máxima seguridad." },
+                        { q: "¿Cuál es el primer paso para un manejo correcto de residuos?", o: ["Transportarlos rápidamente", "Clasificarlos en el lugar donde se generan", "Cerrar bien las bolsas"], a: "Clasificarlos en el lugar donde se generan", f: "La correcta clasificación en el origen es el paso más importante para todo el proceso." }
+                    ]
+                }
+            },
+            minPassScore: 0.7 // 70% para aprobar
+        };
+
+        let state = {
+            currentPage: 'introduccion',
+            progress: [],
+            scores: {},
+            lastScore: null,
+            lastDate: null
+        };
+
+
+        // ======================================
+        // ==== 2. SELECTORES DEL DOM          ====
+        // ======================================
+        
+        const portada = document.getElementById('portada');
+        const cursoWrapper = document.getElementById('curso-wrapper');
+        const btnComenzar = document.getElementById('btnComenzar');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+        const breadcrumb = document.getElementById('breadcrumb');
+        const progressBar = document.getElementById('progressBar');
+        const markAsReadButtons = document.querySelectorAll('.mark-as-read');
+        const mobileToggle = document.getElementById('mobileToggle');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const btnReiniciar = document.getElementById('btnReiniciar');
+        const btnImprimir = document.getElementById('btnImprimir');
+        
+        // Modales
+        const btnGlosario = document.getElementById('btnGlosario');
+        const btnNormativa = document.getElementById('btnNormativa');
+        const glosarioModal = document.getElementById('glosario-modal');
+        const normativaModal = document.getElementById('normativa-modal');
+        const certificadoModal = document.getElementById('certificado-modal');
+
+        // ======================================
+        // ==== 3. LÓGICA DEL CURSO            ====
+        // ======================================
+
+        function init() {
+            loadState();
+            setupEventListeners();
+            navigateTo(state.currentPage || courseData.pages[0]);
+            renderAllQuizzes();
+            updateProgress();
+            
+            if (state.progress.length > 0) {
+                portada.classList.add('hidden');
+                cursoWrapper.classList.remove('hidden');
+            }
+        }
+
+        function setupEventListeners() {
+            btnComenzar.addEventListener('click', startCourse);
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.dataset.page;
+                    navigateTo(pageId);
+                    if(sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                    }
+                });
+            });
+
+            markAsReadButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const pageId = button.dataset.page;
+                    if (!state.progress.includes(pageId)) {
+                        state.progress.push(pageId);
+                    }
+                    saveState();
+                    updateProgress();
+
+                    const currentPageIndex = courseData.pages.indexOf(pageId);
+                    if (currentPageIndex < courseData.pages.length - 1) {
+                        navigateTo(courseData.pages[currentPageIndex + 1]);
+                    }
+                });
+            });
+            
+            mobileToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+            mainContent.addEventListener('click', () => {
+                if(sidebar.classList.contains('open')) {
+                    sidebar.classList.remove('open');
+                }
+            });
+
+            btnReiniciar.addEventListener('click', resetCourse);
+            btnImprimir.addEventListener('click', () => window.print());
+            
+            // Listeners de modales
+            btnGlosario.addEventListener('click', () => glosarioModal.classList.add('visible'));
+            btnNormativa.addEventListener('click', () => normativaModal.classList.add('visible'));
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('visible');
+                    }
+                });
+            });
+            
+            setupDragAndDrop('dnd-1');
+            setupDragAndDrop('dnd-2');
+        }
+
+        function startCourse() {
+            portada.classList.add('hidden');
+            cursoWrapper.classList.remove('hidden');
+            navigateTo(courseData.pages[0]);
+        }
+        
+        function navigateTo(pageId) {
+            state.currentPage = pageId;
+            pages.forEach(page => {
+                page.classList.toggle('active', page.id === pageId);
+            });
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.dataset.page === pageId);
+            });
+            updateBreadcrumb(pageId);
+            window.scrollTo(0, 0);
+            saveState();
+        }
+
+        function updateBreadcrumb(pageId) {
+            const link = document.querySelector(`.nav-link[data-page="${pageId}"]`);
+            if (link) {
+                breadcrumb.textContent = `Inicio / ${link.textContent}`;
+            }
+        }
+        
+        function updateProgress() {
+            const completedCount = state.progress.length;
+            const totalCount = courseData.pages.length;
+            const percentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+            
+            progressBar.style.width = `${percentage}%`;
+            progressBar.textContent = `${percentage}%`;
+
+            navLinks.forEach(link => {
+                const pageId = link.dataset.page;
+                if (state.progress.includes(pageId)) {
+                    link.classList.add('completed');
+                } else {
+                    link.classList.remove('completed');
+                }
+            });
+        }
+        
+        function resetCourse() {
+            if (confirm('¿Estás seguro de que quieres reiniciar el curso? Se borrará todo tu progreso.')) {
+                localStorage.removeItem('courseState');
+                window.location.reload();
+            }
+        }
+
+        // ======================================
+        // ==== 4. LÓGICA DE QUIZZES           ====
+        // ======================================
+        
+        function renderAllQuizzes() {
+            for (const quizId in courseData.quizzes) {
+                renderQuiz(quizId);
+            }
+        }
+
+        function renderQuiz(quizId) {
+            const quizData = courseData.quizzes[quizId];
+            const container = document.getElementById(`quiz-${quizId}`);
+            if (!container || !quizData) return;
+
+            let html = `<h4>${quizData.title}</h4>`;
+            quizData.questions.forEach((q, index) => {
+                html += `
+                    <div class="quiz-question-wrapper" data-quiz-id="${quizId}" data-q-index="${index}">
+                        <p class="quiz-pregunta">${index + 1}. ${q.q}</p>
+                        <div class="quiz-opciones">
+                            ${q.o.map(opcion => `<button class="btn quiz-option">${opcion}</button>`).join('')}
+                        </div>
+                        <div class="quiz-feedback alert">${q.f}</div>
+                    </div>
+                `;
+            });
+            
+            if (quizId === 'final') {
+                html += '<button class="btn btn-secundario" id="btnSubmitFinal">Calificar Evaluación Final</button>';
+            }
+
+            container.innerHTML = html;
+            
+            // Add event listeners
+            container.querySelectorAll('.quiz-option').forEach(button => {
+                button.addEventListener('click', handleQuizOptionClick);
+            });
+            
+            if (quizId === 'final') {
+                document.getElementById('btnSubmitFinal').addEventListener('click', handleSubmitFinalQuiz);
+            }
+        }
+        
+        function handleQuizOptionClick(event) {
+            const button = event.target;
+            const wrapper = button.closest('.quiz-question-wrapper');
+            const quizId = wrapper.dataset.quizId;
+            
+            // Si es el quiz final, no damos feedback inmediato, solo seleccionamos
+            if (quizId === 'final') {
+                wrapper.querySelectorAll('.quiz-option').forEach(btn => btn.style.border = '2px solid #ddd');
+                button.style.border = `2px solid var(--color-secundario)`;
+                wrapper.dataset.selected = button.textContent;
+                return;
+            }
+            
+            // Para quizzes intermedios, damos feedback inmediato
+            const qIndex = parseInt(wrapper.dataset.qIndex);
+            const question = courseData.quizzes[quizId].questions[qIndex];
+            const isCorrect = button.textContent === question.a;
+            
+            wrapper.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
+            
+            button.classList.add(isCorrect ? 'correct' : 'incorrect');
+            const feedbackEl = wrapper.querySelector('.quiz-feedback');
+            feedbackEl.classList.add(isCorrect ? 'alert-exito' : 'alert-riesgo');
+            feedbackEl.style.display = 'block';
+        }
+
+        function handleSubmitFinalQuiz() {
+            const quizData = courseData.quizzes.final;
+            let score = 0;
+            const wrappers = document.querySelectorAll('#quiz-final .quiz-question-wrapper');
+            
+            wrappers.forEach((wrapper, index) => {
+                const question = quizData.questions[index];
+                const selectedAnswer = wrapper.dataset.selected;
+                if (selectedAnswer === question.a) {
+                    score++;
+                }
+            });
+            
+            const totalQuestions = quizData.questions.length;
+            const percentage = score / totalQuestions;
+            const passed = percentage >= courseData.minPassScore;
+            
+            // Guardar puntaje
+            state.lastScore = `${score}/${totalQuestions}`;
+            state.lastDate = new Date().toLocaleDateString('es-ES');
+            saveState();
+
+            // Mostrar resultados
+            document.getElementById('puntuacion-final').textContent = `${score}/${totalQuestions} (${Math.round(percentage * 100)}%)`;
+            const feedbackFinal = document.getElementById('feedback-final');
+            const resultadoFinal = document.getElementById('resultado-final');
+            
+            if(passed) {
+                feedbackFinal.className = 'alert alert-exito';
+                feedbackFinal.innerHTML = '<strong>¡Felicidades, has aprobado!</strong> Has demostrado un excelente conocimiento sobre el manejo seguro de residuos. ¡Sigue aplicando estas buenas prácticas!';
+                document.getElementById('btnCertificado').classList.remove('hidden');
+                document.getElementById('btnRepasar').classList.add('hidden');
+                
+                document.getElementById('btnCertificado').onclick = () => showCertificate(state.lastScore, state.lastDate, Math.round(percentage*100));
+
+            } else {
+                feedbackFinal.className = 'alert alert-riesgo';
+                feedbackFinal.innerHTML = '<strong>Requiere Repaso.</strong> Tu puntuación está por debajo del mínimo. Te recomendamos repasar los módulos del curso y volver a intentarlo.';
+                document.getElementById('btnCertificado').classList.add('hidden');
+                document.getElementById('btnRepasar').classList.remove('hidden');
+                
+                 document.getElementById('btnRepasar').onclick = () => navigateTo('introduccion');
+            }
+            resultadoFinal.classList.remove('hidden');
+            document.getElementById('btnSubmitFinal').classList.add('hidden');
+        }
+
+        function showCertificate(score, date, percentage) {
+            // Podríamos pedir el nombre, pero por simplicidad lo dejamos genérico.
+            // const name = prompt("Por favor, ingresa tu nombre completo para el certificado:", "");
+            // document.getElementById('nombre-certificado').textContent = name || "Personal Capacitado";
+            document.getElementById('fecha-certificado').textContent = date;
+            document.getElementById('puntuacion-certificado').textContent = `${percentage}%`;
+            certificadoModal.classList.add('visible');
+        }
+
+        // ======================================
+        // ==== 5. LÓGICA DRAG & DROP          ====
+        // ======================================
+        
+        function setupDragAndDrop(containerId) {
+            const items = document.querySelectorAll(`#${containerId} .dnd-item`);
+            const targets = document.querySelectorAll(`#${containerId} .dnd-target`);
+            const feedbackEl = document.getElementById(`feedback-${containerId.replace('dnd', 'feedback-dnd')}`);
+
+            items.forEach(item => {
+                item.addEventListener('dragstart', () => {
+                    item.classList.add('dragging');
+                });
+                item.addEventListener('dragend', () => {
+                    item.classList.remove('dragging');
+                });
+            });
+
+            targets.forEach(target => {
+                target.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    target.classList.add('drag-over');
+                });
+                target.addEventListener('dragleave', () => {
+                    target.classList.remove('drag-over');
+                });
+                target.addEventListener('drop', e => {
+                    e.preventDefault();
+                    target.classList.remove('drag-over');
+                    const draggingItem = document.querySelector('.dragging');
+                    if (draggingItem && target.dataset.type === draggingItem.dataset.type) {
+                        target.appendChild(draggingItem);
+                        draggingItem.setAttribute('draggable', 'false');
+                        draggingItem.style.cursor = 'default';
+                        draggingItem.style.borderColor = 'var(--color-correcto)';
+                        feedbackEl.textContent = "¡Correcto!";
+                        feedbackEl.style.color = 'var(--color-correcto)';
+                    } else {
+                        feedbackEl.textContent = "Incorrecto, intenta de nuevo.";
+                        feedbackEl.style.color = 'var(--color-incorrecto)';
+                    }
+                    setTimeout(() => feedbackEl.textContent = "", 2000);
+                });
+            });
+        }
+        
+        // ======================================
+        // ==== 6. MANEJO DE ESTADO (LocalStorage) ====
+        // ======================================
+        
+        function saveState() {
+            localStorage.setItem('courseState', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const savedState = localStorage.getItem('courseState');
+            if (savedState) {
+                state = JSON.parse(savedState);
+            }
+        }
+        
+        // Iniciar la aplicación
+        init();
+    });
+    </script>
+</body>
+</html>
