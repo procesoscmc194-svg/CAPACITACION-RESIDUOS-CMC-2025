@@ -353,20 +353,6 @@
             border-radius: var(--radio-borde);
             display: none; /* Se muestra con JS */
         }
-        
-        .quiz-input-container {
-            margin-bottom: 1rem;
-        }
-        .quiz-input-container label {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .quiz-input-container input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ccc;
-            border-radius: var(--radio-borde);
-        }
 
         /* 5. Interactividad: Drag & Drop */
         .dnd-container {
@@ -675,7 +661,7 @@
                     <p><strong>Definición:</strong> Objetos afilados que han estado en contacto con humanos o animales, sus muestras biológicas, y que pueden causar cortes o pinchazos.</p>
                     <ul>
                         <li><strong>Ejemplos:</strong> Agujas, jeringas con aguja, hojas de bisturí, lancetas, capilares.</li>
-                        <li><strong>Caso Práctico:</strong> Al tomar una muestra de sangre, se desecha la aguja y la jeringa (sin reencapuchar) directamente en el contenedor rojo rígido ("guardián"), que nunca debe llenarse más allá del 80% de su capacidad.</li>
+                        <li><strong>Caso Práctico:</strong> Después de tomar una muestra de sangre, se desecha la aguja y la jeringa (sin reencapuchar) directamente en el contenedor rojo rígido ("guardián"), que nunca debe llenarse más allá del 80% de su capacidad.</li>
                     </ul>
                 </div>
 
@@ -839,28 +825,10 @@
                         <li><strong>Reporta Incidentes:</strong> Si ocurre un derrame o un accidente, informa inmediatamente a tu supervisor.</li>
                     </ol>
                 </div>
-                <p>¡Gracias por tu compromiso con la seguridad! Ahora, es momento de una evaluación final para comprobar lo que has aprendido.</p>
+                <p>¡Gracias por tu compromiso con la seguridad! Para finalizar, por favor completa la siguiente evaluación externa para registrar tu participación.</p>
 
-                <div id="final-form" class="card">
-                    <h4>Antes de comenzar...</h4>
-                    <p>Para tu certificado, por favor ingresa tu nombre completo:</p>
-                    <div class="quiz-input-container">
-                        <input type="text" id="inputNombre" placeholder="Nombre completo" required>
-                    </div>
-                    <button id="btnStartFinalQuiz" class="btn btn-primario">Comenzar Evaluación</button>
-                </div>
-
-                <!-- Quiz Final -->
-                <div id="quiz-final" class="quiz-container card hidden"></div>
-                
-                <div id="resultado-final" class="card hidden">
-                    <h3>Resultado de la Evaluación Final</h3>
-                    <p>Tu puntuación es: <strong id="puntuacion-final">0/0</strong></p>
-                    <div id="feedback-final" class="alert"></div>
-                    <div id="acciones-finales">
-                         <button id="btnCertificado" class="btn btn-primario hidden">Ver/Imprimir Certificado</button>
-                         <button id="btnRepasar" class="btn btn-secundario hidden">Repasar Curso</button>
-                    </div>
+                <div class="card" style="text-align: center;">
+                    <a href="https://script.google.com/macros/s/AKfycbw_R6XeHNSFFJBWI3_n4I9lj-ssJhWZyxp5g4tbh-TrrmH2t4ZUNLoPoWFejHi_ZCcsSw/exec" target="_blank" class="btn btn-secundario" style="font-size: 1.2rem; padding: 1rem 2rem; margin: 1rem 0;">Evaluación</a>
                 </div>
 
                 <button class="btn btn-primario mark-as-read" data-page="conclusion">Marcar como finalizado</button>
@@ -880,23 +848,6 @@
     <!-- ==== MODALES ==== -->
     <!-- ======================= -->
 
-    <!-- Modal del Certificado -->
-    <div id="certificado-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" onclick="document.getElementById('certificado-modal').classList.remove('visible')">&times;</button>
-            <div id="certificado">
-                <img src="https://i.imgur.com/wNPXExU.png" alt="Logo" class="logo">
-                <h3 style="margin-top: 1rem; color: #777;">Certificado de Finalización</h3>
-                <h2>Capacitación en Manejo y Control de Residuos Hospitalarios</h2>
-                <p style="margin: 2rem 0;">Se certifica que:</p>
-                <h3 id="nombre-certificado" style="border-bottom: 2px solid var(--color-acento); padding-bottom: 0.5rem; display: inline-block;">Personal Capacitado</h3>
-                <p style="margin-top: 2rem;">Ha completado satisfactoriamente la capacitación el día <strong id="fecha-certificado">DD/MM/AAAA</strong>.</p>
-                <p>Puntuación Obtenida: <strong id="puntuacion-certificado">0%</strong></p>
-            </div>
-             <button onclick="window.print()" class="btn btn-primario" style="margin-top: 1rem;">Imprimir Certificado</button>
-        </div>
-    </div>
-    
     <!-- Modal del Glosario -->
     <div id="glosario-modal" class="modal-overlay">
          <div class="modal-content">
@@ -933,6 +884,18 @@
         </div>
     </div>
 
+    <!-- Modal genérico para Alertas y Confirmaciones -->
+    <div id="custom-modal" class="modal-overlay">
+         <div class="modal-content" style="max-width: 450px; text-align: center;">
+            <h2 id="custom-modal-title">Título</h2>
+            <p id="custom-modal-text">Mensaje...</p>
+            <div id="custom-modal-buttons" style="margin-top: 1.5rem;">
+                <button id="custom-modal-confirm" class="btn btn-primario">Aceptar</button>
+                <button id="custom-modal-cancel" class="btn btn-outline">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
     // JAVASCRIPT EMBEBIDO
 
@@ -960,16 +923,6 @@
                         { q: "Es una buena práctica reencapuchar las agujas con cuidado para evitar pinchazos.", o: ["Verdadero", "Falso"], a: "Falso", f: "¡Falso! Nunca se deben reencapuchar las agujas. Es la principal causa de accidentes punzocortantes." },
                         { q: "¿Qué es lo último que debes hacer después de manejar residuos y quitarte el EPP?", o: ["Tomar un café", "Llenar papeleo", "Lavarte las manos"], a: "Lavarte las manos", f: "La higiene de manos es el paso final y crucial para prevenir la propagación de gérmenes." }
                     ]
-                },
-                final: {
-                    title: "Evaluación Final",
-                    questions: [
-                        { q: "Un riñón extirpado en una cirugía se considera residuo...", o: ["Infeccioso (rojo)", "Punzocortante (rígido)", "Patológico (amarillo)"], a: "Patológico (amarillo)", f: "Los tejidos y órganos son residuos patológicos y van en contenedor amarillo." },
-                        { q: "El personal de limpieza puede compactar las bolsas rojas para ahorrar espacio.", o: ["Verdadero", "Falso"], a: "Falso", f: "Las bolsas con residuos infecciosos nunca deben compactarse, ya que puede causar aerosoles o derrames peligrosos." },
-                        { q: "El EPP es opcional si solo se va a estar en contacto con los residuos por un momento.", o: ["Verdadero", "Falso"], a: "Falso", f: "El uso de EPP es siempre obligatorio al manejar residuos peligrosos, sin importar el tiempo de exposición." },
-                        { q: "Una hoja de bisturí usada se desecha en:", o: ["Bolsa roja", "Contenedor rígido rojo", "Contenedor negro"], a: "Contenedor rígido rojo", f: "Los bisturís son punzocortantes y deben ir en el contenedor rígido para máxima seguridad." },
-                        { q: "¿Cuál es el primer paso para un manejo correcto de residuos?", o: ["Transportarlos rápidamente", "Clasificarlos en el lugar donde se generan", "Cerrar bien las bolsas"], a: "Clasificarlos en el lugar donde se generan", f: "La correcta clasificación en el origen es el paso más importante para todo el proceso." }
-                    ]
                 }
             },
             minPassScore: 0.7 // 70% para aprobar
@@ -980,8 +933,7 @@
             progress: [],
             scores: {},
             lastScore: null,
-            lastDate: null,
-            userName: ''
+            lastDate: null
         };
 
 
@@ -1008,319 +960,149 @@
         const btnNormativa = document.getElementById('btnNormativa');
         const glosarioModal = document.getElementById('glosario-modal');
         const normativaModal = document.getElementById('normativa-modal');
-        const certificadoModal = document.getElementById('certificado-modal');
-        const inputNombre = document.getElementById('inputNombre');
-        const btnStartFinalQuiz = document.getElementById('btnStartFinalQuiz');
-        const finalForm = document.getElementById('final-form');
-        const quizFinalContainer = document.getElementById('quiz-final');
-
 
         // ======================================
         // ==== 3. LÓGICA DEL CURSO            ====
         // ======================================
 
-        function init() {
-            loadState();
-            setupEventListeners();
-            navigateTo(state.currentPage || courseData.pages[0]);
-            renderAllQuizzes();
-            updateProgress();
-            
-            if (state.progress.length > 0) {
-                portada.classList.add('hidden');
-                cursoWrapper.classList.remove('hidden');
+        function saveState() {
+            const stateToSave = {
+                currentPage: state.currentPage,
+                progress: state.progress,
+                scores: state.scores
+            };
+            localStorage.setItem('courseProgress', JSON.stringify(stateToSave));
+        }
+
+        function loadState() {
+            const savedState = localStorage.getItem('courseProgress');
+            if(savedState) {
+                const parsedState = JSON.parse(savedState);
+                state = { ...state, ...parsedState };
             }
         }
 
-        function setupEventListeners() {
-            btnComenzar.addEventListener('click', startCourse);
-            
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const pageId = link.dataset.page;
-                    navigateTo(pageId);
-                    if(sidebar.classList.contains('open')) {
-                        sidebar.classList.remove('open');
-                    }
-                });
-            });
-
-            markAsReadButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const pageId = button.dataset.page;
-                    if (!state.progress.includes(pageId)) {
-                        state.progress.push(pageId);
-                    }
-                    saveState();
-                    updateProgress();
-
-                    const currentPageIndex = courseData.pages.indexOf(pageId);
-                    if (currentPageIndex < courseData.pages.length - 1) {
-                        navigateTo(courseData.pages[currentPageIndex + 1]);
-                    }
-                });
-            });
-            
-            mobileToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
-            mainContent.addEventListener('click', () => {
-                if(sidebar.classList.contains('open')) {
-                    sidebar.classList.remove('open');
-                }
-            });
-
-            btnReiniciar.addEventListener('click', resetCourse);
-            btnImprimir.addEventListener('click', () => window.print());
-            
-            // Listeners de modales
-            btnGlosario.addEventListener('click', () => glosarioModal.classList.add('visible'));
-            btnNormativa.addEventListener('click', () => normativaModal.classList.add('visible'));
-            document.querySelectorAll('.modal-overlay').forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        modal.classList.remove('visible');
-                    }
-                });
-            });
-
-            btnStartFinalQuiz.addEventListener('click', () => {
-                const userName = inputNombre.value.trim();
-                if (userName) {
-                    state.userName = userName;
-                    finalForm.classList.add('hidden');
-                    quizFinalContainer.classList.remove('hidden');
-                    saveState();
-                } else {
-                    // Reemplazado alert por un método seguro para el entorno
-                    alert('Por favor, ingresa tu nombre completo para comenzar la evaluación.');
-                }
-            });
-            
-            setupDragAndDrop('dnd-1');
-            setupDragAndDrop('dnd-2');
-        }
-
-        function startCourse() {
-            portada.classList.add('hidden');
-            cursoWrapper.classList.remove('hidden');
-            navigateTo(courseData.pages[0]);
-        }
-        
-        function navigateTo(pageId) {
+        function navigateToPage(pageId) {
             state.currentPage = pageId;
-            pages.forEach(page => {
-                page.classList.toggle('active', page.id === pageId);
-            });
-            navLinks.forEach(link => {
-                link.classList.toggle('active', link.dataset.page === pageId);
-            });
-            updateBreadcrumb(pageId);
+            pages.forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId)?.classList.add('active');
+            
+            navLinks.forEach(l => l.classList.remove('active'));
+            document.querySelector(`.nav-link[data-page="${pageId}"]`)?.classList.add('active');
+            
+            const pageTitle = document.querySelector(`.nav-link[data-page="${pageId}"]`)?.textContent || 'Inicio';
+            breadcrumb.textContent = `Inicio / ${pageTitle}`;
+            
             window.scrollTo(0, 0);
             saveState();
         }
 
-        function updateBreadcrumb(pageId) {
-            const link = document.querySelector(`.nav-link[data-page="${pageId}"]`);
-            if (link) {
-                breadcrumb.textContent = `Inicio / ${link.textContent}`;
-            }
-        }
-        
         function updateProgress() {
             const completedCount = state.progress.length;
-            const totalCount = courseData.pages.length;
-            const percentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+            const totalPages = courseData.pages.length;
+            const percentage = totalPages > 0 ? Math.round((completedCount / totalPages) * 100) : 0;
             
             progressBar.style.width = `${percentage}%`;
             progressBar.textContent = `${percentage}%`;
 
-            navLinks.forEach(link => {
-                const pageId = link.dataset.page;
-                if (state.progress.includes(pageId)) {
+            // Actualizar íconos de estado en la navegación
+            document.querySelectorAll('.nav-link .status-icon').forEach(icon => {
+                const link = icon.parentElement;
+                if(state.progress.includes(link.dataset.page)) {
                     link.classList.add('completed');
                 } else {
                     link.classList.remove('completed');
                 }
             });
+            saveState();
         }
-        
-        function resetCourse() {
-            if (confirm('¿Estás seguro de que quieres reiniciar el curso? Se borrará todo tu progreso.')) {
-                localStorage.removeItem('courseState');
-                window.location.reload();
+
+        function markPageAsCompleted(pageId) {
+            if(!state.progress.includes(pageId)) {
+                state.progress.push(pageId);
+                updateProgress();
             }
         }
+
 
         // ======================================
         // ==== 4. LÓGICA DE QUIZZES           ====
         // ======================================
-        
-        function renderAllQuizzes() {
-            for (const quizId in courseData.quizzes) {
-                renderQuiz(quizId);
-            }
-        }
 
-        function renderQuiz(quizId) {
-            const quizData = courseData.quizzes[quizId];
-            const container = document.getElementById(`quiz-${quizId}`);
-            if (!container || !quizData) return;
+        function renderQuizzes() {
+            for (const pageId in courseData.quizzes) {
+                const quizData = courseData.quizzes[pageId];
+                const container = document.getElementById(`quiz-${pageId}`);
+                if (!container) continue;
 
-            let html = `<h4>${quizData.title}</h4>`;
-            quizData.questions.forEach((q, index) => {
-                html += `
-                    <div class="quiz-question-wrapper" data-quiz-id="${quizId}" data-q-index="${index}">
-                        <p class="quiz-pregunta">${index + 1}. ${q.q}</p>
-                        <div class="quiz-opciones">
-                            ${q.o.map(opcion => `<button class="btn quiz-option">${opcion}</button>`).join('')}
+                let html = `<h4>${quizData.title}</h4>`;
+                quizData.questions.forEach((q, index) => {
+                    html += `
+                        <div class="quiz-question-wrapper" data-question-index="${index}">
+                            <p class="quiz-pregunta">${index + 1}. ${q.q}</p>
+                            <div class="quiz-opciones">
+                                ${q.o.map(opt => `<button class="btn quiz-option" data-correct="${opt === q.a}" data-feedback="${q.f}">${opt}</button>`).join('')}
+                            </div>
+                            <div class="quiz-feedback alert"></div>
                         </div>
-                        <div class="quiz-feedback alert">${q.f}</div>
-                    </div>
-                `;
-            });
-            
-            if (quizId === 'final') {
-                html += '<button class="btn btn-secundario" id="btnSubmitFinal">Calificar Evaluación Final</button>';
-            }
-
-            container.innerHTML = html;
-            
-            // Add event listeners
-            container.querySelectorAll('.quiz-option').forEach(button => {
-                button.addEventListener('click', handleQuizOptionClick);
-            });
-            
-            if (quizId === 'final') {
-                document.getElementById('btnSubmitFinal').addEventListener('click', handleSubmitFinalQuiz);
+                        <hr style="margin: 1.5rem 0; border: 1px solid #f0f0f0;">
+                    `;
+                });
+                
+                container.innerHTML = html;
+                
+                // Add event listeners
+                container.querySelectorAll('.quiz-option').forEach(button => {
+                    button.addEventListener('click', handleQuizOptionClick);
+                });
+                
             }
         }
         
         function handleQuizOptionClick(event) {
-            const button = event.target;
-            const wrapper = button.closest('.quiz-question-wrapper');
-            const quizId = wrapper.dataset.quizId;
+            const button = event.currentTarget;
+            const isCorrect = button.dataset.correct === 'true';
+            const pageId = button.closest('.quiz-container').id.replace('quiz-', '');
+            const questionIndex = parseInt(button.closest('.quiz-question-wrapper').dataset.questionIndex);
             
-            // Si es el quiz final, no damos feedback inmediato, solo seleccionamos
-            if (quizId === 'final') {
-                wrapper.querySelectorAll('.quiz-option').forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-                button.classList.add('selected');
-                wrapper.dataset.selected = button.textContent;
-                return;
+            if (!state.scores[pageId]) {
+                state.scores[pageId] = [];
             }
-            
-            // Para quizzes intermedios, damos feedback inmediato
-            const qIndex = parseInt(wrapper.dataset.q-index);
-            const question = courseData.quizzes[quizId].questions[qIndex];
-            const isCorrect = button.textContent === question.a;
-            
-            wrapper.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
-            
-            button.classList.add(isCorrect ? 'correct' : 'incorrect');
-            const feedbackEl = wrapper.querySelector('.quiz-feedback');
-            feedbackEl.classList.add(isCorrect ? 'alert-exito' : 'alert-riesgo');
-            feedbackEl.style.display = 'block';
-        }
+            state.scores[pageId][questionIndex] = isCorrect;
 
-        function handleSubmitFinalQuiz() {
-            const quizData = courseData.quizzes.final;
-            let score = 0;
-            const wrappers = document.querySelectorAll('#quiz-final .quiz-question-wrapper');
+            const wrapper = button.closest('.quiz-question-wrapper');
             
-            wrappers.forEach((wrapper, index) => {
-                const question = quizData.questions[index];
-                const selectedAnswer = wrapper.dataset.selected;
-                if (selectedAnswer === question.a) {
-                    score++;
+            wrapper.querySelectorAll('.quiz-option').forEach(btn => {
+                btn.disabled = true;
+                if (btn.dataset.correct === 'true') {
+                    btn.classList.add('correct');
+                } else if (btn === button) {
+                    btn.classList.add('incorrect');
                 }
             });
-            
-            const totalQuestions = quizData.questions.length;
-            const percentage = score / totalQuestions;
-            const passed = percentage >= courseData.minPassScore;
-            
-            // Guardar puntaje
-            state.lastScore = `${score}/${totalQuestions}`;
-            state.lastDate = new Date().toLocaleDateString('es-ES');
-            saveState();
 
-            // Mostrar resultados
-            document.getElementById('puntuacion-final').textContent = `${score}/${totalQuestions} (${Math.round(percentage * 100)}%)`;
-            const feedbackFinal = document.getElementById('feedback-final');
-            const resultadoFinal = document.getElementById('resultado-final');
-            
-            if(passed) {
-                feedbackFinal.className = 'alert alert-exito';
-                feedbackFinal.innerHTML = '<strong>¡Felicidades, has aprobado!</strong> Has demostrado un excelente conocimiento sobre el manejo seguro de residuos. ¡Sigue aplicando estas buenas prácticas!';
-                document.getElementById('btnCertificado').classList.remove('hidden');
-                document.getElementById('btnRepasar').classList.add('hidden');
-                
-                document.getElementById('btnCertificado').onclick = () => showCertificate(state.userName, state.lastScore, state.lastDate, Math.round(percentage*100));
-
-            } else {
-                feedbackFinal.className = 'alert alert-riesgo';
-                feedbackFinal.innerHTML = '<strong>Requiere Repaso.</strong> Tu puntuación está por debajo del mínimo. Te recomendamos repasar los módulos del curso y volver a intentarlo.';
-                document.getElementById('btnCertificado').classList.add('hidden');
-                document.getElementById('btnRepasar').classList.remove('hidden');
-                
-                 document.getElementById('btnRepasar').onclick = () => navigateTo('introduccion');
-            }
-            resultadoFinal.classList.remove('hidden');
-            document.getElementById('btnSubmitFinal').classList.add('hidden');
-        }
-
-        function showCertificate(name, score, date, percentage) {
-            document.getElementById('nombre-certificado').textContent = name;
-            document.getElementById('fecha-certificado').textContent = date;
-            document.getElementById('puntuacion-certificado').textContent = `${percentage}%`;
-            certificadoModal.classList.add('visible');
+            const feedbackEl = wrapper.querySelector('.quiz-feedback');
+            feedbackEl.innerHTML = button.dataset.feedback;
+            feedbackEl.classList.add(isCorrect ? 'alert-exito' : 'alert-riesgo');
+            feedbackEl.style.display = 'block';
         }
 
         // ======================================
         // ==== 5. LÓGICA DRAG & DROP          ====
         // ======================================
         
-        function setupDragAndDrop(containerId) {
-            const items = document.querySelectorAll(`#${containerId} .dnd-item`);
-            const targets = document.querySelectorAll(`#${containerId} .dnd-target`);
-            const feedbackEl = document.getElementById(`feedback-${containerId.replace('dnd', 'feedback-dnd')}`);
+        function initializeDragAndDrop() {
+            const draggables = document.querySelectorAll('.dnd-item');
+            const targets = document.querySelectorAll('.dnd-target');
 
-            let draggingItem = null;
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', () => {
+                    draggable.classList.add('dragging');
+                });
 
-            // Funciones compartidas para mouse y touch
-            function handleDragStart(item) {
-                draggingItem = item;
-                setTimeout(() => item.classList.add('dragging'), 0);
-            }
-
-            function handleDragEnd(item) {
-                item.classList.remove('dragging');
-                draggingItem = null;
-            }
-
-            function handleDrop(target, item) {
-                target.classList.remove('drag-over');
-                if (item && target.dataset.type === item.dataset.type) {
-                    target.appendChild(item);
-                    item.setAttribute('draggable', 'false');
-                    item.style.cursor = 'default';
-                    item.style.borderColor = 'var(--color-correcto)';
-                    feedbackEl.textContent = "¡Correcto!";
-                    feedbackEl.style.color = 'var(--color-correcto)';
-                    item.removeEventListener('mousedown', handleMouseDown);
-                    item.removeEventListener('touchstart', handleTouchStart);
-                } else {
-                    feedbackEl.textContent = "Incorrecto, intenta de nuevo.";
-                    feedbackEl.style.color = 'var(--color-incorrecto)';
-                }
-                setTimeout(() => feedbackEl.textContent = "", 2000);
-            }
-
-            // Eventos de Mouse
-            items.forEach(item => {
-                item.addEventListener('dragstart', () => handleDragStart(item));
-                item.addEventListener('dragend', () => handleDragEnd(item));
+                draggable.addEventListener('dragend', () => {
+                    draggable.classList.remove('dragging');
+                });
             });
 
             targets.forEach(target => {
@@ -1328,94 +1110,167 @@
                     e.preventDefault();
                     target.classList.add('drag-over');
                 });
-                target.addEventListener('dragleave', () => target.classList.remove('drag-over'));
+                
+                target.addEventListener('dragleave', () => {
+                   target.classList.remove('drag-over');
+                });
+
                 target.addEventListener('drop', e => {
                     e.preventDefault();
-                    handleDrop(target, draggingItem);
-                });
-            });
-
-            // Eventos Táctiles (para móviles y tablets)
-            items.forEach(item => {
-                let touchStartX, touchStartY;
-                let originalParent;
-
-                item.addEventListener('touchstart', (e) => {
-                    handleDragStart(item);
-                    originalParent = item.parentNode;
+                    target.classList.remove('drag-over');
+                    const draggable = document.querySelector('.dragging');
+                    if (!draggable) return;
                     
-                    const touch = e.touches[0];
-                    touchStartX = touch.clientX;
-                    touchStartY = touch.clientY;
+                    const targetType = target.dataset.type;
+                    const draggableType = draggable.dataset.type;
+                    const feedbackElId = `feedback-${target.closest('.dnd-container').id}`;
+                    const feedbackEl = document.getElementById(feedbackElId);
 
-                    item.style.position = 'absolute';
-                    item.style.zIndex = 10;
-                    item.style.width = item.offsetWidth + 'px';
-                    item.style.transform = 'scale(1.1)';
-                });
-
-                item.addEventListener('touchmove', (e) => {
-                    e.preventDefault(); // Evitar el scroll de la página
-                    const touch = e.touches[0];
-                    const deltaX = touch.clientX - touchStartX;
-                    const deltaY = touch.clientY - touchStartY;
-                    
-                    item.style.left = touch.clientX + 'px';
-                    item.style.top = touch.clientY + 'px';
-                    
-                    // Comprobar si está sobre un target
-                    const target = document.elementFromPoint(touch.clientX, touch.clientY);
-                    targets.forEach(t => t.classList.remove('drag-over'));
-                    if (target && target.closest('.dnd-target')) {
-                        target.closest('.dnd-target').classList.add('drag-over');
-                    }
-                });
-
-                item.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    item.style.position = '';
-                    item.style.zIndex = '';
-                    item.style.width = '';
-                    item.style.transform = '';
-                    
-                    const touch = e.changedTouches[0];
-                    const targetEl = document.elementFromPoint(touch.clientX, touch.clientY);
-                    
-                    if (targetEl && targetEl.closest('.dnd-target')) {
-                        handleDrop(targetEl.closest('.dnd-target'), draggingItem);
+                    if (targetType === draggableType) {
+                        target.appendChild(draggable);
+                        draggable.setAttribute('draggable', 'false');
+                        draggable.style.cursor = 'default';
+                        draggable.style.borderColor = 'var(--color-correcto)';
+                        feedbackEl.textContent = '¡Correcto!';
+                        feedbackEl.style.color = 'var(--color-correcto)';
                     } else {
-                         // Si no se soltó en un target, regresarlo a su posición original
-                         originalParent.appendChild(draggingItem);
-                         feedbackEl.textContent = "Incorrecto, intenta de nuevo.";
-                         feedbackEl.style.color = 'var(--color-incorrecto)';
-                         setTimeout(() => feedbackEl.textContent = "", 2000);
+                        feedbackEl.textContent = 'Incorrecto, intenta de nuevo.';
+                        feedbackEl.style.color = 'var(--color-incorrecto)';
                     }
-                    handleDragEnd(item);
+                    
+                    setTimeout(() => {
+                        if(feedbackEl) feedbackEl.textContent = '';
+                    }, 2000);
                 });
             });
         }
-        
+
         // ======================================
-        // ==== 6. MANEJO DE ESTADO (LocalStorage) ====
+        // ==== 6. MODALES PERSONALIZADOS      ====
         // ======================================
-        
-        function saveState() {
-            localStorage.setItem('courseState', JSON.stringify(state));
+
+        const customModal = document.getElementById('custom-modal');
+        const customModalTitle = document.getElementById('custom-modal-title');
+        const customModalText = document.getElementById('custom-modal-text');
+        const customModalConfirm = document.getElementById('custom-modal-confirm');
+        const customModalCancel = document.getElementById('custom-modal-cancel');
+
+        function showCustomAlert(title, text) {
+            customModalTitle.textContent = title;
+            customModalText.textContent = text;
+            customModalConfirm.textContent = 'Aceptar';
+            customModalCancel.style.display = 'none';
+            customModal.classList.add('visible');
+
+            const confirmHandler = () => {
+                customModal.classList.remove('visible');
+                customModalConfirm.removeEventListener('click', confirmHandler);
+            };
+            customModalConfirm.addEventListener('click', confirmHandler);
         }
 
-        function loadState() {
-            const savedState = localStorage.getItem('courseState');
-            if (savedState) {
-                state = JSON.parse(savedState);
-            }
+        function showCustomConfirm(title, text, callback) {
+            customModalTitle.textContent = title;
+            customModalText.textContent = text;
+            customModalConfirm.textContent = 'Confirmar';
+            customModalCancel.style.display = 'inline-block';
+            customModal.classList.add('visible');
+
+            const confirmHandler = () => {
+                customModal.classList.remove('visible');
+                callback();
+                cleanup();
+            };
+            const cancelHandler = () => {
+                customModal.classList.remove('visible');
+                cleanup();
+            };
+            const cleanup = () => {
+                customModalConfirm.removeEventListener('click', confirmHandler);
+                customModalCancel.removeEventListener('click', cancelHandler);
+            };
+
+            customModalConfirm.addEventListener('click', confirmHandler);
+            customModalCancel.addEventListener('click', cancelHandler);
         }
-        
-        // Iniciar la aplicación
-        init();
+
+        // ======================================
+        // ==== 7. INICIALIZACIÓN Y EVENTOS    ====
+        // ======================================
+
+        function initCourse() {
+            loadState();
+            renderQuizzes();
+            initializeDragAndDrop();
+            updateProgress();
+            
+            btnComenzar.addEventListener('click', () => {
+                portada.classList.add('hidden');
+                cursoWrapper.classList.remove('hidden');
+                navigateToPage(state.currentPage);
+            });
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = e.currentTarget.dataset.page;
+                    navigateToPage(pageId);
+                    if (sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                    }
+                });
+            });
+            
+            markAsReadButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const pageId = e.currentTarget.dataset.page;
+                    markPageAsCompleted(pageId);
+                    
+                    const currentPageIndex = courseData.pages.indexOf(pageId);
+                    const nextPageId = courseData.pages[currentPageIndex + 1];
+                    if(nextPageId) {
+                        navigateToPage(nextPageId);
+                    } else {
+                        showCustomAlert('¡Felicidades!', 'Has completado toda la capacitación.');
+                    }
+                });
+            });
+
+            mobileToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+            });
+            
+            mainContent.addEventListener('click', () => {
+                if(sidebar.classList.contains('open')){
+                    sidebar.classList.remove('open');
+                }
+            });
+
+            btnGlosario.addEventListener('click', () => glosarioModal.classList.add('visible'));
+            btnNormativa.addEventListener('click', () => normativaModal.classList.add('visible'));
+            
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if(e.target === modal) {
+                        modal.classList.remove('visible');
+                    }
+                });
+            });
+            
+            btnReiniciar.addEventListener('click', () => {
+                showCustomConfirm('¿Estás seguro?', '¿Quieres reiniciar todo el progreso del curso? Esta acción no se puede deshacer.', () => {
+                     localStorage.removeItem('courseProgress');
+                     window.location.reload();
+                });
+            });
+
+            btnImprimir.addEventListener('click', () => {
+                window.print();
+            });
+        }
+
+        initCourse();
     });
     </script>
 </body>
 </html>
-
-
-
